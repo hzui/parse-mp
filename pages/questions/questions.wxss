@@ -1,0 +1,361 @@
+/* pages/questions/questions.wxss */
+page {
+  background: #f6f7f9;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+  color: #333;
+}
+
+.container {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 40px;
+}
+
+/* Custom Nav */
+.custom-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 100;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.nav-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+}
+
+.back-btn {
+  position: absolute;
+  left: 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.css-back-arrow {
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #333;
+  border-bottom: 2px solid #333;
+  transform: rotate(45deg);
+}
+
+.nav-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Search Section */
+.search-section {
+  background: #f6f7f9; /* 与页面背景一致 */
+  padding: 12px 16px;
+  position: sticky; /* Make search sticky below nav */
+  z-index: 90;
+}
+
+.search-bar {
+  background: #fff; /* 搜索框保持白色 */
+  border-radius: 20px;
+  height: 40px; /* 增加搜索框高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 16px; /* 增加内边距 */
+  border: 1px solid transparent; /* 移除边框，使用阴影 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s;
+}
+
+.search-bar:focus-within {
+  border-color: #2f80ed;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(47, 128, 237, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  font-size: 15px; /* 增大搜索框字体 */
+  margin-left: 8px;
+  height: 100%;
+}
+
+.placeholder {
+  color: #999;
+}
+
+.clear-btn {
+  padding: 4px;
+}
+
+/* Category Tabs */
+.category-scroll {
+  background: #f6f7f9; /* 与页面背景一致 */
+  white-space: nowrap;
+  padding: 0 0 16px; /* 移除顶部间距 */
+  position: relative;
+  z-index: 80;
+  border-bottom: none; /* 移除分割线 */
+}
+
+.category-list {
+  display: flex;
+  padding: 0 16px;
+  flex-wrap: wrap; /* 允许换行 */
+}
+
+.category-item {
+  padding: 6px 14px; /* 缩小标签大小 */
+  background: #fff; /* 标签背景改为白色 */
+  border-radius: 14px; /* 更圆润的标签 */
+  font-size: 13px; /* 减小字号 */
+  color: #5c6b77; /* 优化未选中颜色 */
+  margin-right: 8px;
+  margin-bottom: 8px; /* 增加底部间距 */
+  transition: all 0.25s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); /* 增加轻微阴影 */
+  flex-shrink: 0;
+}
+
+.category-item.active {
+  background: #1296db; /* 选中时改为实心主题色 */
+  color: #fff; /* 文字反白 */
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(18, 150, 219, 0.2); /* 选中时增加阴影 */
+}
+
+/* Section Title */
+.section-title {
+  font-size: 16px; /* 稍微增大字号 */
+  font-weight: 600;
+  padding: 16px 16px 12px;
+  color: #1e293b; /* 使用更深的蓝灰色 */
+}
+
+/* Top Questions Grid */
+.top-questions {
+  margin-bottom: 12px;
+}
+
+.top-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 10px; /* 减小内边距，让卡片更宽 */
+}
+
+.top-item {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 6px;
+  display: flex; /* 让子元素可以撑满高度 */
+  flex-direction: column;
+}
+
+.top-header {
+  background: #eff1f5; /* 接近截图的浅蓝灰色 */
+  padding: 16px 14px;
+  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  box-shadow: none; /* 移除阴影，扁平化 */
+  border: none; /* 移除边框 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden; /* 裁剪溢出的背景数字 */
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.top-header:active {
+  transform: scale(0.97);
+  background: #e5e8ed; /* 点击反馈 */
+}
+
+.bg-number {
+  position: absolute;
+  bottom: -12px;
+  right: 4px;
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.04); /* 极淡的透明黑色 */
+  font-style: italic; /* 斜体 */
+  z-index: 0;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 6px 0 6px 0; /* 左上角和右下角圆角，形成角标效果 */
+  position: absolute; /* 绝对定位 */
+  top: 0;
+  left: 0;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 2; /* 确保在背景数字之上 */
+}
+
+.badge.must {
+  background: #8ecae6; /* 调整为偏蓝的颜色，参考截图 */
+  color: #fff;
+  border: none;
+}
+
+.badge.hot {
+  background: #f4a261; /* 调整为柔和的橙色 */
+  color: #fff;
+  border: none;
+}
+
+.top-text {
+  font-size: 14px; /* 与分类标签一致 */
+  color: #1e293b;
+  line-height: 1.5;
+  font-weight: 600; /* 加粗 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 42px; /* 调整高度以适应更大的字体 */
+  margin-top: 10px; /* 为角标留出空间 */
+  width: 100%;
+  position: relative;
+  z-index: 1; /* 确保在背景数字之上 */
+}
+
+/* Questions List */
+.questions-list {
+  padding-bottom: 20px;
+  padding: 0 12px; /* 列表左右留白 */
+}
+
+.question-item {
+  background: #fff;
+  margin-bottom: 12px; /* 改为卡片式间距 */
+  border-radius: 12px; /* 增加圆角 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02); /* 增加卡片阴影 */
+  overflow: hidden; /* 防止内容溢出圆角 */
+  border: 1px solid rgba(0, 0, 0, 0.01);
+}
+
+.question-header {
+  padding: 16px 16px; /* 调整内边距 */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #fff;
+  transition: background-color 0.2s;
+}
+
+.question-header:active {
+  background-color: #f8fafc;
+}
+
+.question-item.expanded .question-header {
+  border-bottom: 1px dashed #f0f0f0; /* 展开后的分隔线更柔和 */
+}
+
+.q-left {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  padding-right: 12px;
+}
+
+.q-index {
+  color: #94a3b8; /* 优化序号颜色 */
+  font-size: 15px;
+  margin-right: 10px;
+  font-family: 'DINAlternate-Bold', -apple-system, sans-serif;
+  font-weight: 600;
+  padding-top: 1px;
+}
+
+.q-title {
+  font-size: 15px;
+  color: #1e293b; /* 优化标题颜色 */
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.q-icon {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #cbd5e1; /* 优化箭头颜色 */
+  border-bottom: 2px solid #cbd5e1;
+  transform: rotate(45deg);
+  margin-top: 8px; /* 调整箭头位置 */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 更流畅的动画 */
+}
+
+.q-icon.rotate {
+  transform: rotate(-135deg);
+  margin-top: 12px;
+}
+
+.question-answer {
+  background: #f8fafc; /* 更柔和的答案背景色 */
+  padding: 16px;
+  animation: slideDown 0.3s ease-out; /* 增加展开动画 */
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.answer-content {
+  font-size: 14px;
+  color: #475569; /* 优化答案颜色 */
+  line-height: 1.7; /* 增加行高提升可读性 */
+  text-align: justify;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Contact Footer */
+.contact-footer {
+  padding: 30px 16px 50px; /* 增加底部留白 */
+}
+
+.contact-btn {
+  background: #1296db; /* 改为主题色实心背景 */
+  color: #fff; /* 文字改为白色 */
+  font-size: 15px; /* 增大字号 */
+  font-weight: 600; /* 加粗文字 */
+  border: none; /* 移除边框 */
+  border-radius: 24px; /* 更圆润 */
+  height: 48px; /* 增加按钮高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(18, 150, 219, 0.25); /* 增强阴影，更有悬浮感 */
+  transition: all 0.2s ease;
+}
+
+.contact-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 8px rgba(18, 150, 219, 0.2);
+  background: #0f7bbd; /* 点击时变深 */
+}
+
+.contact-btn::after {
+  border: none;
+}

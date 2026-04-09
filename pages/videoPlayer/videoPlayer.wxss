@@ -1,0 +1,229 @@
+/* 视频播放关闭时的禁用状态 */
+.disabled-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+}
+
+.disabled-cover {
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+.disabled-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.disabled-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx;
+  max-width: 560rpx;
+}
+
+.disabled-icon {
+  font-size: 48rpx;
+  line-height: 1;
+}
+
+.disabled-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.disabled-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.video-player-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* 顶部声明条：柔和背景与文字，减少焦虑感 */
+.scroll-text-container {
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.88);
+  z-index: 1;
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+.scroll-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 15s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(50%); }
+  100% { transform: translateX(-100%); }
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+}
+
+/* 返回：左上角简洁箭头，细线条风格 */
+.back-button {
+  position: absolute;
+  top: 48px;
+  left: 16px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  line-height: 40px;
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button::after {
+  border: none;
+}
+
+/* 操作区：右侧垂直排列，超椭圆背景 + 极细描边 */
+.action-buttons {
+  position: absolute;
+  bottom: 120px; /* 整体向上平移，避免与标题重叠 */
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.4); /* 纯色半透明填充 */
+  border: 0.5px solid rgba(255, 255, 255, 0.15); /* 极细描边 */
+  border-radius: 20px; /* 超椭圆/圆角矩形 */
+  min-width: 52px;
+  margin: 0 !important;
+  line-height: 1;
+}
+
+.action-item::after {
+  border: none;
+}
+
+.action-icon {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.save-icon {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 2px; /* 调整间距以保持对齐 */
+}
+
+.action-label {
+  font-size: 10px; /* 缩小一号 */
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+/* 标题容器 - 同样微调位置以避开按钮 */
+.video-title-container {
+  position: absolute;
+  bottom: 40px; /* 配合按钮下移 */
+  left: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  max-width: 65%; /* 限制最大宽度，防止与右侧操作按钮重叠 */
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.video-title {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.no-video-image {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 视频播放提示 */
+.video-tips {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.tips-text {
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  padding: 12rpx 32rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  text-align: center;
+  white-space: nowrap;
+  animation: fadeInOut 3.5s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); }
+  15% { opacity: 1; transform: scale(1); }
+  85% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9); }
+}

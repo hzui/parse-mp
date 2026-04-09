@@ -1,0 +1,109 @@
+<!--pages/questions/questions.wxml-->
+<view class="container" style="padding-top: {{statusBarHeight + navBarHeight}}px">
+  
+  <!-- Custom Navigation Bar -->
+  <view class="custom-nav" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="back-btn" bindtap="onBack">
+        <image class="back-icon" src="/assets/icons/back.svg" mode="aspectFit" wx:if="{{false}}"></image> <!-- Assuming no icon available, using text arrow or CSS -->
+        <view class="css-back-arrow"></view>
+      </view>
+      <text class="nav-title">使用指南</text>
+    </view>
+  </view>
+
+  <!-- Search Section -->
+  <view class="search-section">
+    <view class="search-bar">
+      <icon type="search" size="16" color="#999"></icon>
+      <input 
+        class="search-input" 
+        placeholder="搜索遇到的问题..." 
+        placeholder-class="placeholder" 
+        bindinput="onSearchInput" 
+        value="{{searchKeyword}}"
+        confirm-type="search"
+      />
+      <view class="clear-btn" wx:if="{{searchKeyword}}" bindtap="clearSearch">
+        <icon type="clear" size="16" color="#ccc"></icon>
+      </view>
+    </view>
+  </view>
+
+  <!-- Top Questions (Common Questions) -->
+  <view class="top-questions">
+    <view class="section-title">常见问题</view>
+    <view class="top-grid">
+      <view 
+        class="top-item" 
+        wx:for="{{topQuestions}}" 
+        wx:key="id"
+        bindtap="openQuestionByIndex"
+        data-index="{{item.index}}"
+      >
+        <view class="top-header">
+          <view class="bg-number">{{index + 1}}</view>
+          <text class="badge {{item.badgeType}}" wx:if="{{item.badge}}">{{item.badge}}</text>
+          <text class="top-text">{{item.question}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Category Tabs -->
+  <view class="section-title">全部分类</view>
+  <scroll-view class="category-scroll" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view class="category-list">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="*this" 
+        class="category-item {{currentCategory === item ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-category="{{item}}"
+      >
+        {{item}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Questions List -->
+  <view class="questions-list">
+    <view class="section-title" wx:if="{{currentCategory !== '全部' || searchKeyword}}">
+      {{searchKeyword ? '搜索结果' : currentCategory + '问题'}}
+    </view>
+    
+    <view 
+      class="question-item {{item.showAnswer ? 'expanded' : ''}}" 
+      wx:for="{{filteredQuestions}}" 
+      wx:key="id"
+      id="qa-{{item.id}}"
+    >
+      <view class="question-header" bindtap="toggleAnswer" data-index="{{item.dataIndex}}">
+        <view class="q-left">
+          <text class="q-index">{{item.displayIndex}}.</text>
+          <text class="q-title">{{item.question}}</text>
+        </view>
+        <view class="q-icon {{item.showAnswer ? 'rotate' : ''}}"></view>
+      </view>
+      
+      <view class="question-answer" wx:if="{{item.showAnswer}}">
+        <view class="answer-content">
+          <text user-select>{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Empty State -->
+    <view class="empty-state" wx:if="{{filteredQuestions.length === 0}}">
+      <text>未找到相关问题，建议换个关键词试试</text>
+    </view>
+  </view>
+
+  <!-- Contact Footer -->
+  <view class="contact-footer">
+    <button class="contact-btn" open-type="contact">
+      <text>没解决问题？联系人工客服</text>
+    </button>
+  </view>
+
+</view>

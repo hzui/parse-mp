@@ -1,0 +1,61 @@
+<view wx:if="{{hasParams}}">
+  <!-- 视频播放已关闭：仅显示封面和提示 -->
+  <view wx:if="{{!videoPlayEnabled}}" class="disabled-container">
+    <image class="disabled-cover" src="{{coverUrl}}" mode="aspectFill" />
+    <view class="disabled-overlay">
+      <view class="disabled-box">
+        <text class="disabled-icon">🔒</text>
+        <text class="disabled-title">视频播放暂不可用</text>
+        <text class="disabled-desc">该功能已由管理员关闭，如有疑问请联系客服</text>
+      </view>
+    </view>
+    <button class="back-button" bindtap="closeVideo">‹</button>
+  </view>
+
+  <!-- 视频播放正常展示 -->
+  <view wx:else class="video-player-container">
+    <cover-view class="scroll-text-container">
+      <cover-view class="scroll-text">
+        该视频仅可用于观赏和浏览之目的。视频的版权完全归属于原平台所有，本小程序不会存储任何数字影像资料。观赏者在观看视频过程中，应严格遵守相关法律法规，若出现任何违反法律法规的行为，均与本小程序无任何关联。
+      </cover-view>
+    </cover-view>
+    <video
+      id="video"
+      controls="{{true}}"
+      loop="{{true}}"
+      muted="{{false}}"
+      show-fullscreen-btn="{{true}}"
+      class="video-player"
+      src="{{videoUrl}}"
+      bindfullscreenchange="onFullScreenChange"
+      binderror="onVideoError"
+      autoplay="{{true}}"
+    >
+      <cover-view class="video-tips" wx:if="{{showTips}}">
+        <cover-view class="tips-text">轻点屏幕左右拖动可快进/快退</cover-view>
+      </cover-view>
+    </video>
+    <!-- 返回：简洁左箭头 -->
+    <button class="back-button" bindtap="closeVideo">‹</button>
+    <!-- 标题容器 -->
+    <view class="video-title-container" bindlongpress="onCopyTitle">
+      <text class="video-title">{{truncatedTitle}}</text>
+    </view>
+    <!-- 操作区：右侧垂直排列 + 文字标注 -->
+    <view class="action-buttons">
+      <button class="action-item" open-type="share">
+        <image src="../../images/share-icon.png" class="action-icon" />
+        <text class="action-label">分享</text>
+      </button>
+      <button class="action-item" bindtap="onSaveTap">
+        <image src="../../images/downloads-icon.png" class="action-icon save-icon" />
+        <text class="action-label">保存</text>
+      </button>
+    </view>
+  </view>
+</view>
+
+<view wx:else>
+  <button class="back-button" bindtap="closeVideo">‹</button>
+  <image src="../../images/default-cover.png" class="no-video-image" />
+</view>

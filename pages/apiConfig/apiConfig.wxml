@@ -1,0 +1,98 @@
+<view class="page">
+  <!-- ─── 系统配置 ─────────────────────────────────────────────────────── -->
+  <view class="section">
+    <view class="section-title">系统配置</view>
+
+    <view class="feature-card">
+      <!-- 全站显隐控制 -->
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">全站显隐控制</text>
+          <text class="feature-card__desc">{{allVisible ? '当前：全站可见' : '当前：全站隐身'}}</text>
+        </view>
+        <switch checked="{{allVisible}}" color="#22c55e" bindchange="onToggleAllVisible" />
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">热门榜单</text>
+          <text class="feature-card__desc">关闭后小程序榜单页显示维护中</text>
+        </view>
+        <switch checked="{{rankingEnabled}}" color="#8b5cf6" bindchange="onToggleRanking" />
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">视频播放</text>
+          <text class="feature-card__desc">关闭后视频播放页仅显示封面和提示</text>
+        </view>
+        <switch checked="{{videoPlayEnabled}}" color="#2f80ed" bindchange="onToggleVideoPlay" />
+      </view>
+    </view>
+  </view>
+
+  <!-- ─── 功能配置 ─────────────────────────────────────────────────────── -->
+  <view class="section">
+    <view class="section-title">功能配置</view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">摸鱼日历</text>
+          <text class="feature-card__desc">首页摸鱼卡片数据来源</text>
+        </view>
+        <switch checked="{{moyuEnabled}}" color="#22c55e" bindchange="onToggleMoyu" />
+      </view>
+      <view class="field-inline">
+        <input class="field-inline__input" value="{{moyuApiUrl}}" placeholder="摸鱼 API 地址" bindinput="onMoyuApiInput" />
+        <view class="action-btn" bindtap="saveMoyuApi">保存</view>
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">激励视频广告</text>
+          <text class="feature-card__desc">每日看一次广告解锁无限解析</text>
+        </view>
+        <switch checked="{{adEnabled}}" color="#f59e0b" bindchange="onToggleAd" />
+      </view>
+      <view class="field-inline">
+        <input class="field-inline__input" value="{{adUnitId}}" placeholder="广告单元 ID（adUnitId）" bindinput="onAdUnitInput" />
+        <view class="action-btn" bindtap="saveAdUnitId">保存</view>
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">免责声明</text>
+          <text class="feature-card__desc">首页红色滚动栏内容（可关闭）</text>
+        </view>
+        <switch checked="{{discEnabled}}" color="#fb7185" bindchange="onToggleDisc" />
+      </view>
+      <textarea class="field-textarea" value="{{discContent}}" maxlength="2000" auto-height placeholder="免责声明内容" bindinput="onDiscInput" />
+      <view class="feature-card__actions">
+        <view class="action-btn" bindtap="saveDiscContent">保存声明</view>
+      </view>
+    </view>
+
+    <view class="feature-card">
+      <view class="feature-card__head">
+        <view class="feature-card__meta">
+          <text class="feature-card__title">首页公告</text>
+          <text class="feature-card__desc">首页黄色公告栏内容（可关闭）</text>
+        </view>
+        <switch checked="{{annEnabled}}" color="#0ea5e9" bindchange="onToggleAnn" />
+      </view>
+      <textarea class="field-textarea" value="{{annContent}}" maxlength="2000" auto-height placeholder="公告内容" bindinput="onAnnInput" />
+      <view class="feature-card__actions">
+        <view class="action-btn" bindtap="saveAnnContent">保存公告</view>
+      </view>
+    </view>
+  </view>
+</view>

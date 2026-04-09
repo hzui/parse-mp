@@ -1,0 +1,43 @@
+<view class="moyu-page">
+
+  <!-- 加载中 -->
+  <view wx:if="{{isLoading && !imgUrl}}" class="state-box">
+    <view class="spinner"></view>
+    <text class="state-text">加载中…</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{loadError}}" class="state-box">
+    <text class="state-icon">😿</text>
+    <text class="state-text">加载失败，点击重试</text>
+    <view class="retry-btn" bindtap="onRefresh">重新加载</view>
+  </view>
+
+  <!-- 日历图片 -->
+  <view wx:elif="{{imgUrl}}" class="img-wrap">
+    <image
+      class="moyu-img"
+      src="{{imgUrl}}"
+      mode="widthFix"
+      show-menu-by-longpress
+      binderror="onImgError"
+      bindload="onImgLoad"
+    />
+    <view wx:if="{{isLoading}}" class="img-loading">
+      <view class="spinner spinner--sm"></view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view wx:if="{{imgUrl}}" class="footer-tip">
+    <text class="footer-tip__text">长按图片可保存到相册</text>
+    <text wx:if="{{cacheHit}}" class="footer-tip__cache">已缓存 · 点击刷新获取最新</text>
+  </view>
+
+  <!-- 悬浮刷新按钮 -->
+  <view class="fab-refresh" bindtap="onRefresh">
+    <text class="fab-refresh__icon{{isLoading ? ' spinning' : ''}}">↻</text>
+    <text class="fab-refresh__text">刷新</text>
+  </view>
+
+</view>

@@ -1,0 +1,244 @@
+<view class="profile-page">
+
+  <!-- ① 未登录 -->
+  <block wx:if="{{!isLoggedIn}}">
+    <image class="login-cat" src="../../images/cat.png" mode="aspectFit" />
+    <text class="login-title">登录后查看解析记录</text>
+    <text class="login-desc">微信一键登录，自动保存每次解析历史</text>
+    <button
+      class="login-btn{{isLoggingIn ? ' login-btn--loading' : ''}}"
+      bindtap="doLogin"
+      disabled="{{isLoggingIn}}"
+    >
+      <text wx:if="{{!isLoggingIn}}">微信一键登录</text>
+      <text wx:else class="login-btn__dots">···</text>
+    </button>
+  </block>
+
+  <!-- ③ 已登录 -->
+  <block wx:else>
+
+    <!-- 用户信息栏 -->
+    <view class="user-card">
+      <button class="user-card__avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{userInfo.avatar}}" class="user-card__avatar" src="{{userInfo.avatar}}" mode="aspectFill" />
+        <view wx:else class="user-card__avatar-fallback">
+          <text class="user-card__avatar-letter">{{userInfo.nickname ? userInfo.nickname[0] : '猫'}}</text>
+        </view>
+      </button>
+      <view class="user-card__info">
+        <input
+          class="user-card__name"
+          type="nickname"
+          value="{{userInfo.nickname}}"
+          placeholder="点击设置昵称"
+          placeholder-class="user-card__name-ph"
+          bindinput="onNicknameInput"
+          maxlength="20"
+        />
+        <view wx:if="{{isAdmin}}" class="user-card__admin-badge">管理员</view>
+      </view>
+      <view class="user-card__logout" bindtap="doLogout">
+        <text class="user-card__logout-text">退出</text>
+      </view>
+    </view>
+
+    <!-- 统计横条：仅管理员显示全站统计 -->
+    <view wx:if="{{isAdmin && stats}}" class="stats-bar">
+      <view class="stats-bar__item">
+        <text class="stats-bar__num">{{stats.today_parse}}</text>
+        <text class="stats-bar__label">今日解析</text>
+      </view>
+      <view class="stats-bar__divider"></view>
+      <view class="stats-bar__item">
+        <text class="stats-bar__num">{{stats.today_register}}</text>
+        <text class="stats-bar__label">今日注册</text>
+      </view>
+      <view class="stats-bar__divider"></view>
+      <view class="stats-bar__item">
+        <text class="stats-bar__num">{{stats.today_active}}</text>
+        <text class="stats-bar__label">今日活跃</text>
+      </view>
+      <view class="stats-bar__divider"></view>
+      <view class="stats-bar__item">
+        <text class="stats-bar__num">{{stats.total_users}}</text>
+        <text class="stats-bar__label">总用户</text>
+      </view>
+      <view class="stats-bar__divider"></view>
+      <view class="stats-bar__item">
+        <text class="stats-bar__num">{{stats.total_videos}}</text>
+        <text class="stats-bar__label">总素材</text>
+      </view>
+    </view>
+
+    <!-- 管理员工具入口 -->
+    <view wx:if="{{isAdmin}}" class="admin-menu">
+      <view class="admin-menu__item" bindtap="goApiConfig">
+        <view class="admin-menu__icon admin-menu__icon--api">
+          <text class="admin-menu__icon-text">⚙</text>
+        </view>
+        <view class="admin-menu__info">
+          <text class="admin-menu__title">应用配置管理</text>
+          <text class="admin-menu__desc">功能开关、公告与免责声明统一配置</text>
+        </view>
+        <text class="admin-menu__arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 工具栏：标题 + 筛选 Tab + 搜索 一体化 -->
+    <view class="toolbar">
+      <!-- 标题 + 时间筛选 Tab 同行 -->
+      <view class="toolbar__top">
+        <text class="toolbar__title">解析记录</text>
+        <scroll-view class="toolbar__tabs" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="toolbar__tabs-inner">
+            <view
+              wx:for="{{periodOptions}}"
+              wx:key="value"
+              class="toolbar__tab{{periodIndex === index ? ' toolbar__tab--active' : ''}}"
+              data-index="{{index}}"
+              bindtap="onPeriodTab"
+            >{{item.label}}</view>
+          </view>
+        </scroll-view>
+      </view>
+      <view class="toolbar__search">
+        <text class="toolbar__search-icon">🔍</text>
+        <input
+          class="toolbar__search-input"
+          placeholder="搜索标题或平台"
+          placeholder-class="toolbar__search-ph"
+          value="{{inputValue}}"
+          bindinput="onSearchInput"
+          bindconfirm="onSearchConfirm"
+          confirm-type="search"
+        />
+        <text wx:if="{{inputValue}}" class="toolbar__search-clear" bindtap="onClearSearch">✕</text>
+      </view>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{isLoadingRecords && visibleRecords.length === 0}}" class="state-box">
+      <view class="spinner"></view>
+      <text class="state-box__text">加载中…</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{recordsLoaded && visibleRecords.length === 0}}" class="state-box">
+      <image class="state-box__img" src="../../images/cat.png" mode="aspectFit" />
+      <text class="state-box__text">暂无解析记录</text>
+      <text class="state-box__sub">去首页解析一个视频试试吧</text>
+    </view>
+
+    <!-- 记录列表（双列卡片） -->
+    <block wx:elif="{{visibleRecords.length > 0}}">
+      <view class="record-grid">
+        <view
+          wx:for="{{visibleRecords}}"
+          wx:key="video_id"
+          class="record-card"
+          data-record="{{item}}"
+          bindtap="onRecordTap"
+        >
+          <!-- 封面 -->
+          <view class="record-card__thumb">
+            <image class="record-card__cover" src="{{item.cover_url}}" mode="aspectFill" lazy-load />
+            <view wx:if="{{item.material_type}}" class="record-card__badge record-card__badge--{{item.material_type === '视频' ? 'video' : (item.material_type === '动图' ? 'live' : 'img')}}">{{item.material_type}}</view>
+            <view wx:if="{{item.material_type === '视频' || (!item.material_type && item.video_url)}}" class="record-card__play">
+              <view class="record-card__play-icon"></view>
+            </view>
+          </view>
+          <!-- 信息 -->
+          <view class="record-card__body">
+            <text class="record-card__title">{{item.title || '无标题'}}</text>
+            <view class="record-card__meta">
+              <view class="record-card__author">
+                <image wx:if="{{item.author_avatar}}" class="record-card__author-avatar" src="{{item.author_avatar}}" mode="aspectFill" binderror="onAvatarError" data-videoid="{{item.video_id}}" />
+                <view wx:else class="record-card__author-dot"></view>
+                <text class="record-card__author-name">{{item.author_name || item.platform || '未知'}}</text>
+              </view>
+              <text class="record-card__time">{{item.created_at}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="list-footer">
+        <view wx:if="{{isLoadingRecords}}" class="spinner spinner--sm"></view>
+        <text wx:elif="{{noMoreData}}" class="list-footer__end">— 已全部加载 —</text>
+      </view>
+    </block>
+
+  </block>
+
+  <!-- 记录预览面板 -->
+  <view wx:if="{{previewVisible}}" class="preview-mask" bindtap="closePreview"></view>
+  <view class="preview-sheet{{previewVisible ? ' preview-sheet--show' : ''}}">
+    <view class="preview-drag-handle"></view>
+    <block wx:if="{{previewVisible}}">
+
+      <!-- 封面 / 视频 -->
+      <view class="preview-thumb">
+        <video
+          wx:if="{{(previewRecord.material_type === '视频' || !previewRecord.material_type) && (previewRecord.video_url || previewFirstLiveUrl)}}"
+          id="previewVideo"
+          class="preview-cover"
+          src="{{previewRecord.video_url || previewFirstLiveUrl}}"
+          poster="{{previewRecord.cover_url}}"
+          controls
+          object-fit="contain"
+        />
+        <image wx:else class="preview-cover" src="{{previewRecord.cover_url}}" mode="aspectFill" />
+        <view wx:if="{{previewRecord.material_type}}" class="preview-badge preview-badge--{{previewRecord.material_type === '视频' ? 'video' : (previewRecord.material_type === '动图' ? 'live' : 'img')}}">{{previewRecord.material_type}}</view>
+      </view>
+
+      <!-- 信息区 -->
+      <view class="preview-info">
+        <text class="preview-title">{{previewRecord.title || '无标题'}}</text>
+
+        <!-- 作者行 -->
+        <view wx:if="{{previewRecord.author_name || previewRecord.author_avatar}}" class="preview-author">
+          <image wx:if="{{previewRecord.author_avatar}}" class="preview-author__avatar" src="{{previewRecord.author_avatar}}" mode="aspectFill" binderror="onAvatarError" />
+          <view wx:else class="preview-author__avatar preview-author__avatar--fallback"></view>
+          <text class="preview-author__name">{{previewRecord.author_name || '未知作者'}}</text>
+          <text class="preview-author__sep">·</text>
+          <text class="preview-author__platform">{{previewRecord.platform || ''}}</text>
+        </view>
+
+        <!-- 无作者时仅显示平台+时间 -->
+        <view wx:else class="preview-meta">
+          <text class="preview-platform">{{previewRecord.platform || '未知平台'}}</text>
+          <text class="preview-dot">·</text>
+          <text class="preview-time">{{previewRecord.created_at}}</text>
+        </view>
+
+        <!-- 有作者时时间单独一行 -->
+        <text wx:if="{{previewRecord.author_name || previewRecord.author_avatar}}" class="preview-time preview-time--block">{{previewRecord.created_at}}</text>
+      </view>
+
+      <!-- 操作按钮区：主操作 + 次操作分两行 -->
+      <view class="preview-actions">
+        <!-- 主操作按钮（全宽） -->
+        <view class="preview-actions__primary">
+          <view wx:if="{{previewRecord.material_type === '动图' || previewRecord.material_type === '图文'}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
+            <text class="preview-btn__icon">{{previewRecord.material_type === '动图' ? '◈' : '⊞'}}</text>{{previewRecord.material_type === '动图' ? '查看动图' : '查看图片'}}
+          </view>
+          <view wx:elif="{{previewRecord.video_url}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
+            <text class="preview-btn__icon">▶</text>全屏播放
+          </view>
+          <view wx:elif="{{previewRecord.cover_url}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
+            <text class="preview-btn__icon">⊞</text>查看图片
+          </view>
+        </view>
+        <!-- 次操作按钮（均分） -->
+        <view class="preview-actions__secondary">
+          <view wx:if="{{previewRecord.video_url}}" class="preview-btn preview-btn--ghost" bindtap="copyVideoUrl">复制视频链接</view>
+          <view wx:if="{{previewRecord.cover_url}}" class="preview-btn preview-btn--ghost" bindtap="copyCoverUrl">复制封面链接</view>
+          <view class="preview-btn preview-btn--close" bindtap="closePreview">关闭</view>
+        </view>
+      </view>
+
+    </block>
+  </view>
+
+</view>

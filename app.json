@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/moyu/moyu",
+    "pages/profile/profile",
+    "pages/apiConfig/apiConfig",
+    "pages/videoPlayer/videoPlayer",
+    "pages/questions/questions"
+  ],
+  "window": {
+    "navigationBarTitleText": "拿捏去水印",
+    "navigationBarBackgroundColor": "#f7f8fa",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#2f80ed",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "喵去水印",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/moyu/moyu",
+        "text": "摸鱼日报",
+        "iconPath": "images/ranking.png",
+        "selectedIconPath": "images/ranking-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "个人中心",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents"
+}

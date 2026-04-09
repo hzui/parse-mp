@@ -1,0 +1,129 @@
+page {
+  background: #f8fafc;
+  min-height: 100%;
+}
+
+.moyu-page {
+  min-height: 100vh;
+}
+
+/* 状态区 */
+.state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+  gap: 20rpx;
+}
+
+.state-icon { font-size: 48px; }
+
+.state-text {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.retry-btn {
+  margin-top: 8rpx;
+  padding: 12rpx 40rpx;
+  background: #2f80ed;
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 转圈 */
+.spinner {
+  width: 44rpx;
+  height: 44rpx;
+  border: 3rpx solid #e2e8f0;
+  border-top-color: #2f80ed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner--sm {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 图片区 */
+.img-wrap {
+  position: relative;
+  padding: 24rpx 24rpx 0;
+}
+
+.moyu-img {
+  width: 100%;
+  border-radius: 16rpx;
+  display: block;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.img-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(248,250,252,0.7);
+  border-radius: 16rpx;
+}
+
+/* 底部提示 */
+.footer-tip {
+  text-align: center;
+  padding: 20rpx 0 8rpx;
+}
+
+.footer-tip__text {
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.footer-tip__cache {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4rpx;
+}
+
+/* 悬浮刷新按钮 */
+.fab-refresh {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(100px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 24rpx;
+  background: #f1f5f9;
+  border-radius: 999rpx;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.fab-refresh:active { opacity: 0.7; }
+
+.fab-refresh__icon {
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1;
+  display: inline-block;
+}
+
+.fab-refresh__text {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
