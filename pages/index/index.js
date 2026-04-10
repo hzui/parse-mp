@@ -68,6 +68,13 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
+    const app = getApp();
+    if (app.globalData.reparseUrl) {
+      const url = app.globalData.reparseUrl;
+      app.globalData.reparseUrl = '';
+      this.setData({ inputValue: url });
+      this.onSubmit();
+    }
   },
 
   onHide: function() {
@@ -600,7 +607,7 @@ Page({
 
   // Swiper 箭头控制：上一帧
   onSwiperPrev() {
-    const { gifCurrentIndex, response } = this.data;
+    const { gifCurrentIndex } = this.data;
     if (gifCurrentIndex > 0) {
       this.setData({ gifCurrentIndex: gifCurrentIndex - 1 });
     }
@@ -815,24 +822,18 @@ Page({
   },
 
   onShareAppMessage: function () {
-    const { video_url, cover_url, title, video_id, material_type, platform } = this.data.response;
-    if (video_url || cover_url) {
+    const { cover_url, title } = this.data.response;
+    if (cover_url) {
       return {
-        title: truncateString(title, 35) || '这个视频太赞了，快来看看！',
-        path: `/pages/result/result?url=${encodeURIComponent(video_url || '')}&` +
-              `cover=${encodeURIComponent(cover_url || '')}&` +
-              `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
-              `vid=${encodeURIComponent(video_id || '')}&` +
-              `mt=${encodeURIComponent(material_type || '视频')}&` +
-              `pf=${encodeURIComponent(platform || '')}`,
+        title: truncateString(title, 35) || '发现一个超好用的去水印神器，免费还快！',
+        path: '/pages/index/index',
         imageUrl: cover_url,
       };
-    } else {
-      return {
-        title: '发现一个超好用的去水印神器，免费还快！',
-        path: '/pages/index/index',
-      };
     }
+    return {
+      title: '发现一个超好用的去水印神器，免费还快！',
+      path: '/pages/index/index',
+    };
   },
 
   openCopyPanel(text) {
@@ -850,34 +851,12 @@ Page({
   },
 
   onShareTimeline: function () {
-    const { video_url, cover_url, title, video_id, heat } = this.data.response;
-    if (video_url) {
-      return {
-        title: '分享一个我一直在用的去水印神器',
-        query: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&`+
-               `cover=${encodeURIComponent(cover_url)}&`+
-               `title=${encodeURIComponent(truncateString(title, 80, ''))}&`+
-               `videoid=${encodeURIComponent(video_id)}&`+
-               `heat=${encodeURIComponent(heat || 0)}&`+
-               `fromShare=true`,
-        imageUrl: cover_url,
-        success: () => {
-        },
-        fail: function (err) {
-          console.error('分享失败', err);
-        }
-      };
-    } else {
-      return {
-        title: '分享一个我一直在用的去水印神器',
-        query: '/pages/index/index',
-        success: () => {
-        },
-        fail: function (err) {
-          console.error('分享失败', err);
-        }
-      };
-    }
+    const { cover_url, title } = this.data.response;
+    return {
+      title: truncateString(title, 35) || '分享一个我一直在用的去水印神器',
+      query: 'from=timeline',
+      imageUrl: cover_url || '',
+    };
   },
   
   navigateToQuestions: function() {
