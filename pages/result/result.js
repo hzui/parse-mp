@@ -109,10 +109,21 @@ Page({
     this.ensurePlayableMusicUrl();
   },
 
+  _needsVideoProxy(url) {
+    if (!url) return false;
+    return (
+      url.indexOf('douyinvod.com') !== -1 ||
+      url.indexOf('douyinstatic.com') !== -1 ||
+      url.indexOf('tos-cn-ve') !== -1 ||
+      url.indexOf('xhscdn.com') !== -1 ||
+      url.indexOf('sns-video') !== -1
+    );
+  },
+
   async ensurePlayableVideoUrl() {
     const { video_url, video_id } = this.data.response || {};
     if (!video_url) return;
-    if (video_url.indexOf('douyinvod.com') === -1) return;
+    if (!this._needsVideoProxy(video_url)) return;
     try {
       const res = await request('/api/download', {
         method: 'POST',
@@ -137,11 +148,7 @@ Page({
     const { live_video_urls, video_id, material_type } = this.data.response || {};
     if (material_type !== '动图') return;
     if (!Array.isArray(live_video_urls) || live_video_urls.length === 0) return;
-    const needsProxy = u => u && (
-      u.indexOf('douyinvod.com') !== -1 ||
-      u.indexOf('douyinstatic.com') !== -1 ||
-      u.indexOf('tos-cn-ve') !== -1
-    );
+    const needsProxy = u => this._needsVideoProxy(u);
     if (!live_video_urls.some(needsProxy)) return;
     try {
       const tasks = live_video_urls.map((url, idx) => {
