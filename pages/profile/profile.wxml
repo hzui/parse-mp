@@ -196,24 +196,16 @@
       <view class="preview-info">
         <text class="preview-title">{{previewRecord.title || '无标题'}}</text>
 
-        <!-- 作者行 -->
-        <view wx:if="{{previewRecord.author_name || previewRecord.author_avatar}}" class="preview-author">
+        <!-- 头像/平台/时间 统一一行 -->
+        <view class="preview-meta-row">
           <image wx:if="{{previewRecord.author_avatar}}" class="preview-author__avatar" src="{{previewRecord.author_avatar}}" mode="aspectFill" binderror="onAvatarError" />
-          <view wx:else class="preview-author__avatar preview-author__avatar--fallback"></view>
-          <text class="preview-author__name">{{previewRecord.author_name || '未知作者'}}</text>
-          <text class="preview-author__sep">·</text>
-          <text class="preview-author__platform">{{previewRecord.platform || ''}}</text>
-        </view>
-
-        <!-- 无作者时仅显示平台+时间 -->
-        <view wx:else class="preview-meta">
+          <view wx:elif="{{previewRecord.author_name}}" class="preview-author__avatar preview-author__avatar--fallback"></view>
+          <text wx:if="{{previewRecord.author_name}}" class="preview-author__name">{{previewRecord.author_name}}</text>
+          <text wx:if="{{previewRecord.author_name || previewRecord.platform}}" class="preview-author__sep">·</text>
           <text class="preview-platform">{{previewRecord.platform || '未知平台'}}</text>
           <text class="preview-dot">·</text>
           <text class="preview-time">{{previewRecord.created_at}}</text>
         </view>
-
-        <!-- 有作者时时间单独一行 -->
-        <text wx:if="{{previewRecord.author_name || previewRecord.author_avatar}}" class="preview-time preview-time--block">{{previewRecord.created_at}}</text>
       </view>
 
       <!-- 操作按钮区：主操作 + 次操作分两行 -->

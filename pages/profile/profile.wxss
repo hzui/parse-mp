@@ -474,9 +474,9 @@
   border-radius: 0 0 12rpx 0;
 }
 
-.record-card__badge--video { background: rgba(37,99,235,0.82); }
-.record-card__badge--live  { background: rgba(217,70,239,0.82); }
-.record-card__badge--img   { background: rgba(16,185,129,0.82); }
+.record-card__badge--video { background: rgba(37,99,235,0.55); }
+.record-card__badge--live  { background: rgba(217,70,239,0.55); }
+.record-card__badge--img   { background: rgba(16,185,129,0.55); }
 
 /* 信息区 */
 .record-card__body {
@@ -630,7 +630,16 @@
   margin-bottom: 14rpx;
 }
 
-/* 作者行 */
+/* 头像/平台/时间 统一一行 */
+.preview-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* 作者行（保留兼容） */
 .preview-author {
   display: flex;
   align-items: center;
