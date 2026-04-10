@@ -144,9 +144,6 @@
           <view class="record-card__thumb">
             <image class="record-card__cover" src="{{item.cover_url}}" mode="aspectFill" lazy-load />
             <view wx:if="{{item.material_type}}" class="record-card__badge record-card__badge--{{item.material_type === '视频' ? 'video' : (item.material_type === '动图' ? 'live' : 'img')}}">{{item.material_type}}</view>
-            <view wx:if="{{item.material_type === '视频' || (!item.material_type && item.video_url)}}" class="record-card__play">
-              <view class="record-card__play-icon"></view>
-            </view>
           </view>
           <!-- 信息 -->
           <view class="record-card__body">
@@ -155,7 +152,9 @@
               <view class="record-card__author">
                 <image wx:if="{{item.author_avatar}}" class="record-card__author-avatar" src="{{item.author_avatar}}" mode="aspectFill" binderror="onAvatarError" data-videoid="{{item.video_id}}" />
                 <view wx:else class="record-card__author-dot"></view>
-                <text class="record-card__author-name">{{item.author_name || item.platform || '未知'}}</text>
+                <text class="record-card__author-name">{{item.author_name || '未知'}}</text>
+                <text wx:if="{{item.platform}}" class="record-card__author-sep">·</text>
+                <text wx:if="{{item.platform}}" class="record-card__platform">{{item.platform}}</text>
               </view>
               <text class="record-card__time">{{item.created_at}}</text>
             </view>
@@ -208,24 +207,19 @@
         </view>
       </view>
 
-      <!-- 操作按钮区：主操作 + 次操作分两行 -->
+      <!-- 操作按钮区 -->
       <view class="preview-actions">
-        <!-- 主操作按钮（全宽） -->
-        <view class="preview-actions__primary">
-          <view wx:if="{{previewRecord.material_type === '动图' || previewRecord.material_type === '图文'}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
+        <!-- 主操作按钮（动图/图文才显示） -->
+        <view class="preview-actions__primary" wx:if="{{previewRecord.material_type === '动图' || previewRecord.material_type === '图文'}}">
+          <view class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
             <text class="preview-btn__icon">{{previewRecord.material_type === '动图' ? '◈' : '⊞'}}</text>{{previewRecord.material_type === '动图' ? '查看动图' : '查看图片'}}
-          </view>
-          <view wx:elif="{{previewRecord.video_url}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
-            <text class="preview-btn__icon">▶</text>全屏播放
-          </view>
-          <view wx:elif="{{previewRecord.cover_url}}" class="preview-btn preview-btn--primary" bindtap="openPreviewMedia">
-            <text class="preview-btn__icon">⊞</text>查看图片
           </view>
         </view>
         <!-- 次操作按钮（均分） -->
         <view class="preview-actions__secondary">
-          <view wx:if="{{previewRecord.video_url}}" class="preview-btn preview-btn--ghost" bindtap="copyVideoUrl">复制视频链接</view>
-          <view wx:if="{{previewRecord.cover_url}}" class="preview-btn preview-btn--ghost" bindtap="copyCoverUrl">复制封面链接</view>
+          <view wx:if="{{previewRecord.share_url}}" class="preview-btn preview-btn--reparse" bindtap="reparse">重新解析</view>
+          <view wx:if="{{previewRecord.video_url}}" class="preview-btn preview-btn--ghost" bindtap="copyVideoUrl">视频链接</view>
+          <view wx:if="{{previewRecord.cover_url}}" class="preview-btn preview-btn--ghost" bindtap="copyCoverUrl">封面链接</view>
           <view class="preview-btn preview-btn--close" bindtap="closePreview">关闭</view>
         </view>
       </view>
