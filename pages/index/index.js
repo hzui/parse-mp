@@ -815,32 +815,22 @@ Page({
   },
 
   onShareAppMessage: function () {
-    const { video_url, cover_url, title, video_id, heat } = this.data.response;
-    if (video_url) {
+    const { video_url, cover_url, title, video_id, material_type, platform } = this.data.response;
+    if (video_url || cover_url) {
       return {
         title: truncateString(title, 35) || '这个视频太赞了，快来看看！',
-        path: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&`+
-              `cover=${encodeURIComponent(cover_url)}&`+
-              `title=${encodeURIComponent(truncateString(title, 80, ''))}&`+
-              `videoid=${encodeURIComponent(video_id)}&`+
-              `heat=${encodeURIComponent(heat || 0)}&`+
-              `fromShare=true`,
+        path: `/pages/result/result?url=${encodeURIComponent(video_url || '')}&` +
+              `cover=${encodeURIComponent(cover_url || '')}&` +
+              `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
+              `vid=${encodeURIComponent(video_id || '')}&` +
+              `mt=${encodeURIComponent(material_type || '视频')}&` +
+              `pf=${encodeURIComponent(platform || '')}`,
         imageUrl: cover_url,
-        success: () => {
-        },
-        fail: (err) => {
-          console.error('分享失败', err);
-        }
       };
     } else {
       return {
         title: '发现一个超好用的去水印神器，免费还快！',
         path: '/pages/index/index',
-        success: () => {
-        },
-        fail: (err) => {
-          console.error('右上角分享失败', err);
-        }
       };
     }
   },

@@ -1,7 +1,7 @@
 <view wx:if="{{hasParams}}">
   <!-- 视频播放正常展示 -->
   <view class="video-player-container">
-    <cover-view class="scroll-text-container">
+    <cover-view class="scroll-text-container" style="top: {{statusBarHeight}}px;">
       <cover-view class="scroll-text">
         该视频仅可用于观赏和浏览之目的。视频的版权完全归属于原平台所有，本小程序不会存储任何数字影像资料。观赏者在观看视频过程中，应严格遵守相关法律法规，若出现任何违反法律法规的行为，均与本小程序无任何关联。
       </cover-view>
@@ -23,7 +23,7 @@
       </cover-view>
     </video>
     <!-- 返回：简洁左箭头 -->
-    <button class="back-button" bindtap="closeVideo">‹</button>
+    <button class="back-button" style="top: {{statusBarHeight + 8}}px;" bindtap="closeVideo">‹</button>
     <!-- 标题容器 -->
     <view class="video-title-container" bindlongpress="onCopyTitle">
       <text class="video-title">{{truncatedTitle}}</text>

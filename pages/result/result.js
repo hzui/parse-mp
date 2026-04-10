@@ -38,34 +38,60 @@ Page({
     hasRetried: false,
   },
 
-  onLoad() {
+  onLoad(options) {
     const app = getApp();
     const data = app.globalData.parseResult;
-    if (!data) {
-      // 冷启动时无数据（如从分享链接直接进入），跳回首页
+
+    if (data) {
+      // 正常流程：从 index 页解析后跳转
+      app.globalData.parseResult = null;
+      const {
+        response, parseResults, selectedResultIndex,
+        showVideo, showArticle, showCoverButton,
+        showSaveCoverButton, showSaveVideoButton, showSaveAlbumButton
+      } = data;
+      this.setData({
+        response,
+        parseResults: parseResults || [],
+        selectedResultIndex: selectedResultIndex || 0,
+        showVideo: !!showVideo,
+        showArticle: !!showArticle,
+        showCoverButton: !!showCoverButton,
+        showSaveCoverButton: !!showSaveCoverButton,
+        showSaveVideoButton: !!showSaveVideoButton,
+        showSaveAlbumButton: !!showSaveAlbumButton,
+      });
+    } else if (options.vid || options.url) {
+      // 冷启动：从分享链接进入，通过 URL 参数重建基础结果
+      const video_url = options.url ? decodeURIComponent(options.url) : '';
+      const cover_url = options.cover ? decodeURIComponent(options.cover) : '';
+      const title = options.title ? decodeURIComponent(options.title) : '';
+      const video_id = options.vid ? decodeURIComponent(options.vid) : '';
+      const material_type = options.mt ? decodeURIComponent(options.mt) : '视频';
+      const platform = options.pf ? decodeURIComponent(options.pf) : '';
+      const isVideo = material_type === '视频';
+      const isDongtu = material_type === '动图';
+      const response = {
+        video_url, cover_url, title, video_id, platform,
+        material_type, images: [], live_video_urls: [],
+        music_url: '', music_play_url: '', video_source_url: video_url,
+        author: null, share_url: ''
+      };
+      this.setData({
+        response,
+        parseResults: [],
+        showVideo: isVideo || isDongtu,
+        showArticle: !!title,
+        showCoverButton: !!cover_url,
+        showSaveVideoButton: isVideo,
+        showSaveCoverButton: !!cover_url,
+        showSaveAlbumButton: false,
+      });
+    } else {
+      // 无任何数据，跳回首页
       wx.switchTab({ url: '/pages/index/index' });
       return;
     }
-    // 清除全局缓存，避免下次误用
-    app.globalData.parseResult = null;
-
-    const {
-      response, parseResults, selectedResultIndex,
-      showVideo, showArticle, showCoverButton,
-      showSaveCoverButton, showSaveVideoButton, showSaveAlbumButton
-    } = data;
-
-    this.setData({
-      response,
-      parseResults: parseResults || [],
-      selectedResultIndex: selectedResultIndex || 0,
-      showVideo: !!showVideo,
-      showArticle: !!showArticle,
-      showCoverButton: !!showCoverButton,
-      showSaveCoverButton: !!showSaveCoverButton,
-      showSaveVideoButton: !!showSaveVideoButton,
-      showSaveAlbumButton: !!showSaveAlbumButton,
-    });
 
     this.ensurePlayableGifUrls();
     this.ensurePlayableMusicUrl();
@@ -471,16 +497,17 @@ Page({
   },
 
   onShareAppMessage() {
-    const { video_url, cover_url, title, video_id, heat } = this.data.response;
-    if (video_url) {
+    const { video_url, cover_url, title, video_id, material_type, platform } = this.data.response;
+    const shareTitle = truncateString(title, 35) || '这个视频太赞了，快来看看！';
+    if (video_url || cover_url) {
       return {
-        title: truncateString(title, 35) || '这个视频太赞了，快来看看！',
-        path: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
-              `cover=${encodeURIComponent(cover_url)}&` +
-              `title=${encodeURIComponent(truncateString(title, 80, ''))}&` +
-              `videoid=${encodeURIComponent(video_id)}&` +
-              `heat=${encodeURIComponent(heat || 0)}&` +
-              `fromShare=true`,
+        title: shareTitle,
+        path: `/pages/result/result?url=${encodeURIComponent(video_url || '')}&` +
+              `cover=${encodeURIComponent(cover_url || '')}&` +
+              `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
+              `vid=${encodeURIComponent(video_id || '')}&` +
+              `mt=${encodeURIComponent(material_type || '视频')}&` +
+              `pf=${encodeURIComponent(platform || '')}`,
         imageUrl: cover_url,
       };
     }

@@ -5,18 +5,27 @@ import { truncateString } from '../../utils/util';
 
 Page({
   data: {
-    videoUrl: '', // 视频地址
-    coverUrl: '', // 封面图地址
-    title: '', // 标题内容
-    truncatedTitle: '', // 截取后的标题内容
-    videoId: '', // 视频ID
-    heat: 0, // 热度
-    fromShare: false, // 是否从分享进入
-    showTips: false, // 是否显示播放提示
-    hasRetried: false, // 是否已重试过
+    videoUrl: '',
+    coverUrl: '',
+    title: '',
+    truncatedTitle: '',
+    videoId: '',
+    heat: 0,
+    fromShare: false,
+    showTips: false,
+    hasRetried: false,
+    statusBarHeight: 20,
   },
 
   onLoad: function (options) {
+    // 获取状态栏高度，用于顶部元素安全偏移
+    try {
+      const { statusBarHeight = 20 } = wx.getSystemInfoSync();
+      this.setData({ statusBarHeight });
+    } catch (e) {
+      this.setData({ statusBarHeight: 20 });
+    }
+
     // 获取传递的参数并解码
     const { url, cover, title, videoid, fromShare, heat} = options;
     const decodedVideoId = videoid ? decodeURIComponent(videoid) : '';

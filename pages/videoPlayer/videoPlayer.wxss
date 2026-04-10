@@ -64,7 +64,6 @@
   width: 100%;
   overflow: hidden;
   position: absolute;
-  top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.45);
   color: rgba(255, 255, 255, 0.88);
@@ -94,7 +93,6 @@
 /* 返回：左上角简洁箭头，细线条风格 */
 .back-button {
   position: absolute;
-  top: 48px;
   left: 16px;
   z-index: 10;
   width: 40px;
