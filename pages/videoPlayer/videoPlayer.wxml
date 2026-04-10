@@ -1,7 +1,7 @@
 <view wx:if="{{hasParams}}">
-  <!-- 视频播放正常展示 -->
   <view class="video-player-container">
-    <cover-view class="scroll-text-container" style="top: {{statusBarHeight}}px;">
+    <!-- 顶部声明条：从 top:0 开始，内容区用 padding-top 避开状态栏 -->
+    <cover-view class="scroll-text-container" style="padding-top: {{statusBarHeight}}px;">
       <cover-view class="scroll-text">
         该视频仅可用于观赏和浏览之目的。视频的版权完全归属于原平台所有，本小程序不会存储任何数字影像资料。观赏者在观看视频过程中，应严格遵守相关法律法规，若出现任何违反法律法规的行为，均与本小程序无任何关联。
       </cover-view>
@@ -22,14 +22,14 @@
         <cover-view class="tips-text">轻点屏幕左右拖动可快进/快退</cover-view>
       </cover-view>
     </video>
-    <!-- 返回：简洁左箭头 -->
+    <!-- 返回按钮：状态栏下方 + 8px -->
     <button class="back-button" style="top: {{statusBarHeight + 8}}px;" bindtap="closeVideo">‹</button>
     <!-- 标题容器 -->
     <view class="video-title-container" bindlongpress="onCopyTitle">
       <text class="video-title">{{truncatedTitle}}</text>
     </view>
-    <!-- 操作区：右侧垂直排列 + 文字标注 -->
-    <view class="action-buttons">
+    <!-- 操作区 -->
+    <view class="action-buttons" style="bottom: calc(120px + env(safe-area-inset-bottom));">
       <button class="action-item" open-type="share">
         <image src="../../images/share-icon.png" class="action-icon" />
         <text class="action-label">分享</text>
@@ -43,6 +43,6 @@
 </view>
 
 <view wx:else>
-  <button class="back-button" bindtap="closeVideo">‹</button>
+  <button class="back-button" style="top: {{statusBarHeight + 8}}px;" bindtap="closeVideo">‹</button>
   <image src="../../images/default-cover.png" class="no-video-image" />
 </view>

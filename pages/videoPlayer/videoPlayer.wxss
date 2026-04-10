@@ -64,12 +64,13 @@
   width: 100%;
   overflow: hidden;
   position: absolute;
+  top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.55);
   color: rgba(255, 255, 255, 0.88);
-  z-index: 1;
+  z-index: 10;
   font-size: 12px;
-  padding: 6px 0;
+  padding-bottom: 6px;
 }
 
 .scroll-text {
@@ -117,7 +118,6 @@
 /* 操作区：右侧垂直排列，超椭圆背景 + 极细描边 */
 .action-buttons {
   position: absolute;
-  bottom: 120px; /* 整体向上平移，避免与标题重叠 */
   right: 16px;
   z-index: 10;
   display: flex;
