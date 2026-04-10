@@ -33,7 +33,7 @@
 | 小程序端 | 网页端 |
 |:---:|:---:|
 | 微信扫码体验 | [1.vlin.top](https://1.vlin.top) |
-| <img src="images/qr_code.webp" width="160" alt="小程序太阳码"> | [![网页端](https://img.shields.io/badge/🌐_在线体验-1.vlin.top-4f46e5?style=for-the-badge)](https://1.vlin.top) |
+| <img src="images/qr_code.jpg" width="160" alt="小程序太阳码"> | [![网页端](https://img.shields.io/badge/🌐_在线体验-1.vlin.top-4f46e5?style=for-the-badge)](https://1.vlin.top) |
 
 > 本仓库仅包含前端小程序代码，核心解析能力由后端服务提供。
 
