@@ -1,0 +1,30 @@
+<view class="page">
+  <!-- 封面 -->
+  <view class="cover-wrap">
+    <image class="cover-img" src="{{coverUrl}}" mode="aspectFill" />
+    <view wx:if="{{materialType}}" class="cover-badge">{{materialType}}</view>
+  </view>
+
+  <!-- 信息卡片 -->
+  <view class="info-card">
+    <text class="title" user-select>{{title || '无标题'}}</text>
+    <view class="meta" wx:if="{{platform}}">
+      <text class="platform">{{platform}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="btn btn-primary" bindtap="goParseNow">
+      <text class="btn-text">去解析同款</text>
+    </button>
+    <button wx:if="{{videoUrl}}" class="btn btn-ghost" bindtap="watchVideo">
+      <text class="btn-text">播放视频</text>
+    </button>
+  </view>
+
+  <!-- 底部品牌 -->
+  <view class="brand">
+    <text class="brand-text">由「拿捏去水印」解析分享</text>
+  </view>
+</view>

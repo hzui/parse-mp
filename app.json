@@ -6,6 +6,7 @@
     "pages/apiConfig/apiConfig",
     "pages/videoPlayer/videoPlayer",
     "pages/result/result",
+    "pages/share/share",
     "pages/questions/questions"
   ],
   "window": {

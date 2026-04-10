@@ -69,6 +69,11 @@ Page({
       this.getTabBar().setData({ selected: 0 });
     }
     const app = getApp();
+    // 从分享落地页跳回时，预填分享链接
+    if (app.globalData.prefillUrl) {
+      this.setData({ inputValue: app.globalData.prefillUrl, isClearMode: true });
+      app.globalData.prefillUrl = '';
+    }
     if (app.globalData.reparseUrl) {
       const url = app.globalData.reparseUrl;
       app.globalData.reparseUrl = '';
@@ -822,11 +827,25 @@ Page({
   },
 
   onShareAppMessage: function () {
-    const { cover_url, title } = this.data.response;
+    const { video_url, cover_url, title, video_id, platform, material_type, share_url } = this.data.response;
+    if (cover_url || video_url) {
+      const path = `/pages/share/share?` +
+        `url=${encodeURIComponent(video_url || '')}&` +
+        `cover=${encodeURIComponent(cover_url || '')}&` +
+        `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
+        `vid=${encodeURIComponent(video_id || '')}&` +
+        `pf=${encodeURIComponent(platform || '')}&` +
+        `mt=${encodeURIComponent(material_type || '')}&` +
+        `share_url=${encodeURIComponent(share_url || '')}`;
+      return {
+        title: truncateString(title, 35) || '发现一个超好用的去水印神器，免费还快！',
+        path,
+        imageUrl: cover_url || '',
+      };
+    }
     return {
-      title: truncateString(title, 35) || '发现一个超好用的去水印神器，免费还快！',
+      title: '发现一个超好用的去水印神器，免费还快！',
       path: '/pages/index/index',
-      imageUrl: cover_url || '',
     };
   },
 
