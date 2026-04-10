@@ -497,23 +497,23 @@ Page({
   },
 
   onShareAppMessage() {
-    const { video_url, cover_url, title, video_id, material_type, platform } = this.data.response;
-    const shareTitle = truncateString(title, 35) || '这个视频太赞了，快来看看！';
-    if (video_url || cover_url) {
+    const { video_url, cover_url, title, video_id, heat, material_type } = this.data.response;
+    if (video_url && material_type !== '图文' && material_type !== '动图') {
       return {
-        title: shareTitle,
-        path: `/pages/result/result?url=${encodeURIComponent(video_url || '')}&` +
+        title: truncateString(title, 35) || '这个视频太赞了，快来看看！',
+        path: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
               `cover=${encodeURIComponent(cover_url || '')}&` +
               `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
-              `vid=${encodeURIComponent(video_id || '')}&` +
-              `mt=${encodeURIComponent(material_type || '视频')}&` +
-              `pf=${encodeURIComponent(platform || '')}`,
+              `videoid=${encodeURIComponent(video_id || '')}&` +
+              `heat=${encodeURIComponent(heat || 0)}&` +
+              `fromShare=true`,
         imageUrl: cover_url,
       };
     }
     return {
-      title: '发现一个超好用的去水印神器，免费还快！',
+      title: truncateString(title, 35) || '发现一个超好用的去水印神器，免费还快！',
       path: '/pages/index/index',
+      imageUrl: cover_url || '',
     };
   },
 });
