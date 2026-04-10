@@ -444,22 +444,16 @@
 /* 类型角标 */
 .record-card__badge {
   position: absolute;
-  top: 0; left: 0;
-  font-size: 10px;
-  font-weight: 600;
+  top: 8rpx; left: 8rpx;
+  font-size: 11px;
+  font-weight: 500;
   color: rgba(255,255,255,0.95);
-  padding: 4rpx 14rpx;
-  border-radius: 0 0 14rpx 0;
-  backdrop-filter: blur(10px) saturate(1.6);
-  -webkit-backdrop-filter: blur(10px) saturate(1.6);
-  border-right: 0.5px solid rgba(255,255,255,0.18);
-  border-bottom: 0.5px solid rgba(255,255,255,0.18);
-  letter-spacing: 0.3px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
-
-.record-card__badge--video { background: rgba(37,99,235,0.55); }
-.record-card__badge--live  { background: rgba(217,70,239,0.55); }
-.record-card__badge--img   { background: rgba(16,185,129,0.55); }
 
 /* 信息区 */
 .record-card__body {
@@ -596,23 +590,17 @@
 
 .preview-badge {
   position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 10px;
-  font-weight: 600;
-  color: #fff;
-  padding: 4rpx 16rpx;
-  border-radius: 0 0 14rpx 0;
-  letter-spacing: 0.3px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-right: 0.5px solid rgba(255,255,255,0.2);
-  border-bottom: 0.5px solid rgba(255,255,255,0.2);
+  top: 10px;
+  left: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.95);
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
-
-.preview-badge--video { background: rgba(37, 99, 235, 0.45); }
-.preview-badge--live  { background: rgba(217, 70, 239, 0.45); }
-.preview-badge--img   { background: rgba(16, 185, 129, 0.45); }
 
 /* 信息区 */
 .preview-info {
