@@ -20,22 +20,34 @@
 
 一款专为创作者打造的**短视频素材获取工具**，支持抖音、快手、小红书、西瓜、最右、A站、虎牙、Twitter、TikTok、YouTube 等 15+ 主流平台，一键获取无水印高清视频。
 
-<p align="center">
-  <img src="images/Interface.webp" width="600" alt="拿捏去水印 界面预览">
-</p>
-
 </div>
 
 ---
 
 ## 📱 立即体验
 
-| 小程序端 | 网页端 |
-|:---:|:---:|
-| 微信扫码体验 | [1.vlin.top](https://1.vlin.top) |
-| <img src="images/qr_code.jpg" width="160" alt="小程序太阳码"> | [![网页端](https://img.shields.io/badge/🌐_在线体验-1.vlin.top-4f46e5?style=for-the-badge)](https://1.vlin.top) |
+<p align="center">
+  <img src="images/Interface.webp" width="680" alt="拿捏去水印 界面预览 — 首页解析、摸鱼日报、个人中心">
+</p>
 
-> 本仓库仅包含前端小程序代码，核心解析能力由后端服务提供。
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <b>🧩 微信小程序</b><br><br>
+      <img src="images/qr_code.jpg" width="160" alt="小程序太阳码"><br><br>
+      微信扫码即可体验
+    </td>
+    <td align="center" width="50%">
+      <b>🌐 网页端在线体验</b><br><br>
+      <a href="https://1.vlin.top">
+        <img src="https://img.shields.io/badge/立即体验-1.vlin.top-4f46e5?style=for-the-badge&logo=google-chrome&logoColor=white" alt="网页端体验">
+      </a><br><br>
+      浏览器直接访问，无需安装
+    </td>
+  </tr>
+</table>
+
+> **说明**：本仓库仅包含前端小程序代码，核心解析能力由后端服务提供。
 
 ---
 
