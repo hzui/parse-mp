@@ -466,12 +466,12 @@
 /* 类型角标 */
 .record-card__badge {
   position: absolute;
-  top: 8rpx; left: 8rpx;
+  top: 0; left: 0;
   font-size: 9px;
   font-weight: 700;
   color: #fff;
-  padding: 2rpx 10rpx;
-  border-radius: 999rpx;
+  padding: 3rpx 12rpx;
+  border-radius: 0 0 12rpx 0;
 }
 
 .record-card__badge--video { background: rgba(37,99,235,0.82); }
@@ -599,13 +599,13 @@
 
 .preview-badge {
   position: absolute;
-  top: 16rpx;
-  left: 16rpx;
+  top: 0;
+  left: 0;
   font-size: 10px;
   font-weight: 600;
   color: #fff;
   padding: 4rpx 16rpx;
-  border-radius: 999rpx;
+  border-radius: 0 0 14rpx 0;
   letter-spacing: 0.3px;
 }
 

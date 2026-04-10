@@ -55,18 +55,9 @@ Page({
 
   closeVideo: function () {
     if (this.data.fromShare) {
-      // 在跳转前存储参数
-      const app = getApp();
-      app.globalData.rankingParams = {
-        appCurrentPeriod: 'all',
-        appSearchQuery: encodeURIComponent(this.data.title)
-      };
-      // 从分享进入，跳转到 ranking 页面，并传递参数
-      wx.switchTab({
-        url: `/pages/ranking/ranking`
-      });
+      // 从分享进入，回到首页
+      wx.switchTab({ url: '/pages/index/index' });
     } else {
-      // 正常返回上一页
       wx.navigateBack();
     }
   },
