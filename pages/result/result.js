@@ -42,7 +42,8 @@ Page({
     const app = getApp();
     const data = app.globalData.parseResult;
     if (!data) {
-      wx.navigateBack();
+      // 冷启动时无数据（如从分享链接直接进入），跳回首页
+      wx.switchTab({ url: '/pages/index/index' });
       return;
     }
     // 清除全局缓存，避免下次误用
