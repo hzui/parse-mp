@@ -497,19 +497,7 @@ Page({
   },
 
   onShareAppMessage() {
-    const { video_url, cover_url, title, video_id, heat, material_type } = this.data.response;
-    if (video_url && material_type !== '图文' && material_type !== '动图') {
-      return {
-        title: truncateString(title, 35) || '这个视频太赞了，快来看看！',
-        path: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
-              `cover=${encodeURIComponent(cover_url || '')}&` +
-              `title=${encodeURIComponent(truncateString(title, 80, '') || '')}&` +
-              `videoid=${encodeURIComponent(video_id || '')}&` +
-              `heat=${encodeURIComponent(heat || 0)}&` +
-              `fromShare=true`,
-        imageUrl: cover_url,
-      };
-    }
+    const { cover_url, title } = this.data.response;
     return {
       title: truncateString(title, 35) || '发现一个超好用的去水印神器，免费还快！',
       path: '/pages/index/index',
