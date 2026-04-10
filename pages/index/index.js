@@ -17,6 +17,8 @@ Page({
     adEnabled: false,
     adUnitId: '',
     adUnlocked: false,  // 今日是否已解锁
+    // 跳转结果页开关
+    autoJumpResult: false,
     // 公告相关
     announcementEnabled: false,
     announcementContent: '',
@@ -59,6 +61,7 @@ Page({
   onLoad: function() {
     this._loadAdStatus();
     this._loadAnnouncement();
+    this._loadJumpConfig();
   },
 
   onShow: function() {
@@ -107,6 +110,19 @@ Page({
       });
     } catch (e) {
       this.setData({ announcementEnabled: false, disclaimerEnabled: true });
+    }
+  },
+
+  /** 拉取跳转结果页开关 */
+  async _loadJumpConfig() {
+    try {
+      const res = await request('/admin/api/app_config', { method: 'GET' });
+      const rows = Array.isArray(res?.data) ? res.data : [];
+      const cfg = {};
+      rows.forEach(row => { cfg[row.config_key] = row.config_value; });
+      this.setData({ autoJumpResult: cfg.auto_jump_result === '1' });
+    } catch (e) {
+      // 接口失败时默认不跳转
     }
   },
 
@@ -323,6 +339,18 @@ Page({
           this.ensurePlayableVideoUrl();
           this.ensurePlayableGifUrls();
           this.ensurePlayableMusicUrl();
+
+          // 开启跳转结果页时，自动跳转到 videoPlayer 页
+          if (this.data.autoJumpResult && normalizedCurrent.video_url) {
+            const { video_url, cover_url, title, video_id, heat } = normalizedCurrent;
+            wx.navigateTo({
+              url: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
+                   `cover=${encodeURIComponent(cover_url || '')}&` +
+                   `title=${encodeURIComponent(title || '')}&` +
+                   `videoid=${encodeURIComponent(video_id || '')}&` +
+                   `heat=${encodeURIComponent(heat || 0)}`
+            });
+          }
         }
       }
     } catch (error) {

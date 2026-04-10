@@ -16,6 +16,7 @@ Page({
   data: {
     rankingEnabled: false,
     videoPlayEnabled: true,
+    autoJumpResult: false,
     allVisible: true,
     moyuEnabled: false,
     moyuApiUrl: '',
@@ -69,6 +70,7 @@ Page({
         this.setData({
           rankingEnabled: cfg.ranking_enabled !== '0',
           videoPlayEnabled: cfg.video_play_enabled !== '0',
+          autoJumpResult: cfg.auto_jump_result === '1',
           allVisible: cfg.all_visible !== '0',
         });
       },
@@ -132,6 +134,12 @@ Page({
   },
 
   // ─── 系统配置 ─────────────────────────────────────────────────────────────
+
+  onToggleAutoJump(e) {
+    const enabled = e.detail.value;
+    this.setData({ autoJumpResult: enabled });
+    this._post(ENDPOINTS.updateConfig, { config_key: 'auto_jump_result', config_value: enabled ? '1' : '0' }, enabled ? '跳转结果页已开启' : '跳转结果页已关闭');
+  },
 
   onToggleRanking(e) {
     const enabled = e.detail.value;
