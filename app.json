@@ -5,6 +5,7 @@
     "pages/profile/profile",
     "pages/apiConfig/apiConfig",
     "pages/videoPlayer/videoPlayer",
+    "pages/result/result",
     "pages/questions/questions"
   ],
   "window": {

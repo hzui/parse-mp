@@ -339,18 +339,22 @@ Page({
           this.ensurePlayableGifUrls();
           this.ensurePlayableMusicUrl();
 
-          // 开启跳转结果页时，等视频 URL 代理完成后再跳转
+          // 开启跳转结果页时，等视频 URL 代理完成后再跳转到独立结果页
           if (this.data.autoJumpResult) {
             this.ensurePlayableVideoUrl().then(() => {
-              const { video_url, cover_url, title, video_id, heat } = this.data.response;
-              if (!video_url) return; // 图文/动图类型不跳转
-              wx.navigateTo({
-                url: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
-                     `cover=${encodeURIComponent(cover_url || '')}&` +
-                     `title=${encodeURIComponent(title || '')}&` +
-                     `videoid=${encodeURIComponent(video_id || '')}&` +
-                     `heat=${encodeURIComponent(heat || 0)}`
-              });
+              const app = getApp();
+              app.globalData.parseResult = {
+                response: this.data.response,
+                parseResults: this.data.parseResults,
+                selectedResultIndex: this.data.selectedResultIndex,
+                showVideo: this.data.showVideo,
+                showArticle: this.data.showArticle,
+                showCoverButton: this.data.showCoverButton,
+                showSaveCoverButton: this.data.showSaveCoverButton,
+                showSaveVideoButton: this.data.showSaveVideoButton,
+                showSaveAlbumButton: this.data.showSaveAlbumButton,
+              };
+              wx.navigateTo({ url: '/pages/result/result' });
             });
           } else {
             this.ensurePlayableVideoUrl();

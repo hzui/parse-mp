@@ -1,0 +1,223 @@
+<view class="page">
+  <!-- 结果列表选择器（多条结果时显示） -->
+  <view class="result-list" wx:if="{{parseResults.length > 1}}">
+    <view class="result-list-header">
+      <text class="result-list-title">共 {{parseResults.length}} 条结果</text>
+    </view>
+    <scroll-view class="result-list-scroll" scroll-x>
+      <view class="result-list-row">
+        <view
+          wx:for="{{parseResults}}"
+          wx:key="video_id"
+          class="result-list-item {{selectedResultIndex === index ? 'active' : ''}}"
+          data-index="{{index}}"
+          bindtap="selectResult"
+        >
+          <image class="result-list-cover" src="{{item.cover_url}}" mode="aspectFill" />
+          <view class="result-list-meta">
+            <view class="result-list-label-wrap">
+              <text class="result-list-label">{{item.material_type || item.platform}}</text>
+              <text class="result-list-label-count" wx:if="{{(item.material_type === '图文' || item.material_type === '动图') && item.images && item.images.length > 0}}"> {{selectedResultIndex === index ? gifCurrentIndex + 1 : 1}}/{{item.images.length}}</text>
+            </view>
+            <text class="result-list-text">{{item.title || '无标题'}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 结果卡片 -->
+  <view class="result-card">
+    <!-- 作者信息 -->
+    <view class="author-info" wx:if="{{response.author && response.author.name}}">
+      <image class="author-avatar" src="{{response.author.avatar}}" mode="aspectFill" wx:if="{{response.author.avatar}}"></image>
+      <view class="author-avatar placeholder-avatar" wx:else>
+        <text>{{response.author.name[0]}}</text>
+      </view>
+      <view class="author-meta">
+        <text class="author-name">{{response.author.name}}</text>
+        <text class="author-subtitle">{{response.platform}} · {{response.author.role || '创作者'}}</text>
+      </view>
+    </view>
+    <view class="author-divider" wx:if="{{response.author && response.author.name}}"></view>
+
+    <!-- 视频预览/封面 -->
+    <view class="video-block" wx:if="{{showVideo || showCoverButton}}">
+      <view class="video-glass-label">{{(response.material_type && response.material_type !== '视频') ? response.material_type : (response.platform || '视频素材')}}</view>
+      <image
+        wx:if="{{showCoverButton && !showVideo}}"
+        class="result-video"
+        src="{{response.cover_url}}"
+        mode="aspectFill"
+        bindtap="viewCoverImage"
+      />
+      <!-- 普通视频播放器 -->
+      <video
+        wx:if="{{showVideo && response.material_type !== '动图'}}"
+        id="mainVideo"
+        class="result-video"
+        src="{{response.video_url}}"
+        poster="{{response.cover_url}}"
+        binderror="onVideoError"
+        controls
+      />
+      <!-- 动图/混合作品：swiper 按 images 逐帧 -->
+      <view wx:if="{{showVideo && response.material_type === '动图' && response.images && response.images.length > 0}}" class="gif-swiper-wrap">
+        <swiper
+          class="gif-swiper"
+          indicator-dots="{{response.images.length > 1}}"
+          indicator-color="rgba(255,255,255,0.5)"
+          indicator-active-color="#ffffff"
+          circular="{{false}}"
+          current="{{gifCurrentIndex}}"
+          bindchange="onGifSwiperChange"
+          touchable="{{true}}"
+          acceleration="{{true}}"
+          display-multiple-items="{{1}}"
+        >
+          <swiper-item wx:for="{{response.images}}" wx:key="index">
+            <video
+              wx:if="{{response.live_video_urls && response.live_video_urls[index]}}"
+              id="gifVideo{{index}}"
+              class="gif-video"
+              src="{{response.live_video_urls[index]}}"
+              poster="{{item}}"
+              autoplay="{{gifCurrentIndex === index}}"
+              loop="{{true}}"
+              muted="{{false}}"
+              controls="{{false}}"
+              show-fullscreen-btn="{{false}}"
+              show-play-btn="{{false}}"
+              show-center-play-btn="{{false}}"
+              object-fit="contain"
+              bindtimeupdate="onGifTimeUpdate"
+              bindtap="onGifVideoTap"
+              data-index="{{index}}"
+            />
+            <image
+              wx:else
+              class="gif-video"
+              src="{{item}}"
+              mode="aspectFit"
+              bindtap="onGifImageTap"
+              data-index="{{index}}"
+            />
+          </swiper-item>
+        </swiper>
+        <view class="swiper-control-arrow swiper-control-prev"
+              bindtap="onSwiperPrev"
+              wx:if="{{response.images.length > 1 && gifCurrentIndex > 0}}">
+          <text class="swiper-arrow-icon">‹</text>
+        </view>
+        <view class="swiper-control-arrow swiper-control-next"
+              bindtap="onSwiperNext"
+              wx:if="{{response.images.length > 1 && gifCurrentIndex < response.images.length - 1}}">
+          <text class="swiper-arrow-icon">›</text>
+        </view>
+        <view class="gif-overlay">
+          <view class="gif-progress-bar" wx:if="{{gifVideoDuration > 0}}">
+            <view class="gif-progress-fill" style="width: {{gifVideoProgress * 100}}%;"></view>
+          </view>
+          <view class="gif-status-row">
+            <text class="gif-time-text" wx:if="{{gifVideoDuration > 0}}">{{gifCurrentTimeStr}} / {{gifDurationStr}}</text>
+            <view style="flex:1;"></view>
+            <text class="gif-page-text" wx:if="{{response.images.length > 1}}">{{gifCurrentIndex + 1}} / {{response.images.length}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- 图文图片网格 -->
+      <view class="album-header" wx:if="{{response.images && response.images.length > 1 && response.material_type !== '动图'}}">
+        <text class="album-count">{{response.material_type || '图文'}}（{{response.images.length}}张）</text>
+      </view>
+      <view class="album-grid" wx:if="{{response.images && response.images.length > 1 && response.material_type !== '动图'}}">
+        <view
+          wx:for="{{response.images}}"
+          wx:key="*this"
+          wx:if="{{index < 6}}"
+          class="album-grid-item"
+          data-index="{{index}}"
+          bindtap="viewImageAtIndex"
+        >
+          <image class="album-grid-img" src="{{item}}" mode="aspectFill" />
+          <view class="album-more-mask" wx:if="{{index === 5 && response.images.length > 6}}">
+            <text class="album-more-text">+{{response.images.length - 6}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 标题内容 -->
+    <view class="title-block" wx:if="{{showArticle}}">
+      <view class="title-header">
+        <text class="title-label">文案内容</text>
+      </view>
+      <text class="title-content" user-select>{{response.title}}</text>
+    </view>
+
+    <!-- 音频模块 -->
+    <view class="audio-block {{audioLoading ? 'audio-loading' : ''}}" wx:if="{{response.music_url || response.audio_url}}" bindtap="toggleAudio">
+      <view class="audio-left">
+        <image class="vinyl-icon {{audioPlaying ? 'spinning' : ''}} {{audioLoading ? 'pulsing' : ''}}" src="../../images/disc.png" mode="aspectFit" />
+        <view class="audio-loading-mask" wx:if="{{audioLoading}}">
+          <view class="audio-loading-spinner"></view>
+        </view>
+        <view class="audio-text-wrap">
+          <text class="glitch-text" data-text="原声音乐">原声音乐</text>
+          <text class="audio-hint" wx:if="{{audioLoading}}">音频加载中…</text>
+          <text class="audio-hint" wx:elif="{{audioPlaying}}">（播放中）</text>
+          <text class="audio-hint" wx:else>（点击试听）</text>
+        </view>
+      </view>
+      <view class="audio-right" catchtap="copyMusicUrl">
+        <text class="glitch-text" data-text="音乐链接">音乐链接</text>
+      </view>
+    </view>
+
+    <!-- 操作矩阵 -->
+    <view class="action-matrix">
+      <view class="primary-actions">
+        <view class="primary-actions-left">
+          <button class="primary-btn btn-save-video" bindtap="downloadVideo" wx:if="{{showSaveVideoButton}}">
+            <image class="btn-icon" src="../../images/download_vid.png" />
+            <text>保存视频</text>
+          </button>
+          <button class="primary-btn btn-save-album" bindtap="downloadAlbum" wx:if="{{showSaveAlbumButton}}">
+            <image class="btn-icon" src="../../images/download_img.png" />
+            <text>保存图集</text>
+          </button>
+        </view>
+        <button class="primary-btn btn-save-cover btn-cover-fixed" bindtap="downloadCover" wx:if="{{showSaveCoverButton}}">
+          <image class="btn-icon" src="../../images/download_img.png" />
+          <text>保存封面</text>
+        </button>
+      </view>
+      <view class="secondary-actions-grid">
+        <view class="grid-item" bindtap="copyAllInfo">
+          <text>全部复制</text>
+        </view>
+        <view class="grid-item" bindtap="copyTitle">
+          <text>复制文案</text>
+        </view>
+        <view class="grid-item" bindtap="copyCoverUrl">
+          <text>复制封面</text>
+        </view>
+        <view class="grid-item" bindtap="copyVideoUrl">
+          <text>{{(response.material_type === '图文' || response.material_type === '动图') ? '复制图集' : '复制源链'}}</text>
+        </view>
+        <button class="grid-item grid-btn-share" open-type="share">
+          <text>分享好友</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 长按复制面板 -->
+  <view class="copy-panel-mask" wx:if="{{showCopyPanel}}" bindtap="closeCopyPanel"></view>
+  <view class="copy-panel" wx:if="{{showCopyPanel}}">
+    <view class="copy-panel-header">
+      <text class="copy-panel-title">长按下方文本复制</text>
+      <view class="copy-panel-close" bindtap="closeCopyPanel">关闭</view>
+    </view>
+    <text class="copy-panel-content" user-select>{{copyPanelText}}</text>
+  </view>
+</view>
