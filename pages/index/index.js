@@ -323,6 +323,7 @@ Page({
           if (!(normalizedCurrent.music_url || normalizedCurrent.audio_url)) {
             console.log('解析结果未包含音频字段，raw current =', current);
           }
+          const jumping = this.data.autoJumpResult;
           this.setData({
             response: { ...normalizedCurrent, video_source_url: normalizedCurrent.video_source_url || sourceVideoUrl },
             parseResults: normalizedItems,
@@ -333,14 +334,15 @@ Page({
             showSaveVideoButton: isVideo,
             showSaveCoverButton: !!current.cover_url,
             showSaveAlbumButton: isAlbum,
-            showWhiteBackground: true,
+            // 跳转模式下不在 index 渲染结果区，避免 <video> 用原始 CDN URL 触发 403
+            showWhiteBackground: !jumping,
             gifCurrentIndex: 0
           });
           this.ensurePlayableGifUrls();
           this.ensurePlayableMusicUrl();
 
           // 开启跳转结果页时，等视频 URL 代理完成后再跳转到独立结果页
-          if (this.data.autoJumpResult) {
+          if (jumping) {
             this.ensurePlayableVideoUrl().then(() => {
               const app = getApp();
               app.globalData.parseResult = {
