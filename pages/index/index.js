@@ -336,20 +336,24 @@ Page({
             showWhiteBackground: true,
             gifCurrentIndex: 0
           });
-          this.ensurePlayableVideoUrl();
           this.ensurePlayableGifUrls();
           this.ensurePlayableMusicUrl();
 
-          // 开启跳转结果页时，自动跳转到 videoPlayer 页
-          if (this.data.autoJumpResult && normalizedCurrent.video_url) {
-            const { video_url, cover_url, title, video_id, heat } = normalizedCurrent;
-            wx.navigateTo({
-              url: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
-                   `cover=${encodeURIComponent(cover_url || '')}&` +
-                   `title=${encodeURIComponent(title || '')}&` +
-                   `videoid=${encodeURIComponent(video_id || '')}&` +
-                   `heat=${encodeURIComponent(heat || 0)}`
+          // 开启跳转结果页时，等视频 URL 代理完成后再跳转
+          if (this.data.autoJumpResult) {
+            this.ensurePlayableVideoUrl().then(() => {
+              const { video_url, cover_url, title, video_id, heat } = this.data.response;
+              if (!video_url) return; // 图文/动图类型不跳转
+              wx.navigateTo({
+                url: `/pages/videoPlayer/videoPlayer?url=${encodeURIComponent(video_url)}&` +
+                     `cover=${encodeURIComponent(cover_url || '')}&` +
+                     `title=${encodeURIComponent(title || '')}&` +
+                     `videoid=${encodeURIComponent(video_id || '')}&` +
+                     `heat=${encodeURIComponent(heat || 0)}`
+              });
             });
+          } else {
+            this.ensurePlayableVideoUrl();
           }
         }
       }

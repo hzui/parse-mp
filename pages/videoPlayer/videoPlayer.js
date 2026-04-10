@@ -1,7 +1,6 @@
 import { copyToClipboard } from '../../utils/clipboard';
 import { downloadCoverToPhotosAlbum, downloadVideoToPhotosAlbum } from '../../utils/file';
 import { truncateString } from '../../utils/util';
-import config from '../../utils/config';
 
 
 Page({
@@ -15,7 +14,6 @@ Page({
     fromShare: false, // 是否从分享进入
     showTips: false, // 是否显示播放提示
     hasRetried: false, // 是否已重试过
-    videoPlayEnabled: true, // 视频播放开关
   },
 
   onLoad: function (options) {
@@ -53,18 +51,6 @@ Page({
       // 如果没有参数，设置 hasParams 为 false
       this.setData({ hasParams: false });
     }
-
-    // 检查视频播放开关
-    wx.request({
-      url: `${config.baseURL}/admin/api/app_config`,
-      method: 'GET',
-      success: r => {
-        const rows = Array.isArray(r.data?.data) ? r.data.data : [];
-        const cfg = {};
-        rows.forEach(row => { cfg[row.config_key] = row.config_value; });
-        this.setData({ videoPlayEnabled: cfg.video_play_enabled !== '0' });
-      },
-    });
   },
 
   closeVideo: function () {

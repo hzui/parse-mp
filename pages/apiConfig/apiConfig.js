@@ -15,7 +15,6 @@ const ENDPOINTS = {
 Page({
   data: {
     rankingEnabled: false,
-    videoPlayEnabled: true,
     autoJumpResult: false,
     allVisible: true,
     moyuEnabled: false,
@@ -58,7 +57,7 @@ Page({
     const BASE = config.baseURL;
     const H = this._header();
 
-    // 从 app_config 批量读取系统开关（rankingEnabled、videoPlayEnabled、allVisible）
+    // 从 app_config 批量读取系统开关（rankingEnabled、autoJumpResult、allVisible）
     wx.request({
       url: `${BASE}${ENDPOINTS.appConfig}`,
       method: 'GET',
@@ -69,7 +68,6 @@ Page({
         rows.forEach(row => { cfg[row.config_key] = row.config_value; });
         this.setData({
           rankingEnabled: cfg.ranking_enabled !== '0',
-          videoPlayEnabled: cfg.video_play_enabled !== '0',
           autoJumpResult: cfg.auto_jump_result === '1',
           allVisible: cfg.all_visible !== '0',
         });
@@ -145,12 +143,6 @@ Page({
     const enabled = e.detail.value;
     this.setData({ rankingEnabled: enabled });
     this._post(ENDPOINTS.updateConfig, { config_key: 'ranking_enabled', config_value: enabled ? '1' : '0' }, enabled ? '榜单已开启' : '榜单已关闭');
-  },
-
-  onToggleVideoPlay(e) {
-    const enabled = e.detail.value;
-    this.setData({ videoPlayEnabled: enabled });
-    this._post(ENDPOINTS.updateConfig, { config_key: 'video_play_enabled', config_value: enabled ? '1' : '0' }, enabled ? '视频播放已开启' : '视频播放已关闭');
   },
 
   onToggleAllVisible(e) {

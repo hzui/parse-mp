@@ -33,16 +33,6 @@
         <switch checked="{{autoJumpResult}}" color="#14b8a6" bindchange="onToggleAutoJump" />
       </view>
     </view>
-
-    <view class="feature-card">
-      <view class="feature-card__head">
-        <view class="feature-card__meta">
-          <text class="feature-card__title">视频播放</text>
-          <text class="feature-card__desc">关闭后视频播放页仅显示封面和提示</text>
-        </view>
-        <switch checked="{{videoPlayEnabled}}" color="#2f80ed" bindchange="onToggleVideoPlay" />
-      </view>
-    </view>
   </view>
 
   <!-- ─── 功能配置 ─────────────────────────────────────────────────────── -->
